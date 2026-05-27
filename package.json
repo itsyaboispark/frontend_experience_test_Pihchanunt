@@ -1,6 +1,7 @@
 {
   "name": "@medalverse/frontend-experience-test",
   "version": "0.1.0",
+  "main": "index.js",
   "private": true,
   "engines": {
     "node": "20.x"
