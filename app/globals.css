@@ -604,3 +604,22 @@
     font-family: var(--font-family-display);
   }
 }
+
+/* ==========================================
+   5. Scrollbar Customization
+   ========================================== */
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-netural-300);
+    border-radius: 9999px;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none!important;
+  }
+}

@@ -1,21 +1,32 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  Search,
-} from "lucide-react";
-import { DashboardEvent, TabKey } from "@/modules/experience/domain/dashboard.types";
+  DashboardEvent,
+  TabKey,
+} from "@/modules/experience/domain/dashboard.types";
 import { DateRangePicker, TextInput } from "@/components/ui";
 import { withBackendAuthHeaders } from "@/shared/auth/backend-access-token.client";
 import { apiPath } from "@/shared/constants/routes";
-import { ClaimDialog, ClaimSuccessModal, ClaimToastBanner } from "./components/claim-dialog";
+import {
+  ClaimDialog,
+  ClaimSuccessModal,
+  ClaimToastBanner,
+} from "./components/claim-dialog";
 import { EventCard, RegisterEventCard } from "./components/experience-cards";
 import { FilterCheckbox, FilterSection } from "./components/experience-filters";
-import { ClaimDialogForm, ClaimToast, EventsState } from "./experience-content.types";
-import { buildClaimFormsForEvent, buildPaginationItems, createEmptyState, tabs } from "./experience-content.utils";
+import {
+  ClaimDialogForm,
+  ClaimToast,
+  EventsState,
+} from "./experience-content.types";
+import {
+  buildClaimFormsForEvent,
+  buildPaginationItems,
+  createEmptyState,
+  tabs,
+} from "./experience-content.utils";
 
 const BOOKMARK_STORAGE_KEY = "mv_bookmarked_event_ids";
 const UNBOOKMARK_STORAGE_KEY = "mv_unbookmarked_event_ids";
@@ -33,6 +44,9 @@ export function ExperienceContent() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [typeSearch, setTypeSearch] = useState("");
+  const [fieldSearch, setFieldSearch] = useState("");
+  const [levelSearch, setLevelSearch] = useState("");
   const [location, setLocation] = useState("");
 
   const [showFilters, setShowFilters] = useState(false);
@@ -45,7 +59,9 @@ export function ExperienceContent() {
   const [registeredIds, setRegisteredIds] = useState<string[]>([]);
   const [claimedIds, setClaimedIds] = useState<string[]>([]);
   const [showClaimDialog, setShowClaimDialog] = useState(false);
-  const [claimDialogTab, setClaimDialogTab] = useState<"credential" | "event">("credential");
+  const [claimDialogTab, setClaimDialogTab] = useState<"credential" | "event">(
+    "credential",
+  );
   const [claimForms, setClaimForms] = useState<ClaimDialogForm[]>([]);
   const [claimActiveIndex, setClaimActiveIndex] = useState(0);
   const [isClaimSubmitting, setIsClaimSubmitting] = useState(false);
@@ -63,7 +79,9 @@ export function ExperienceContent() {
       if (!Array.isArray(parsed)) {
         return;
       }
-      const ids = parsed.filter((item: unknown): item is string => typeof item === "string");
+      const ids = parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
       setBookmarkedIds(ids);
     } catch {
       // Ignore invalid localStorage value
@@ -80,7 +98,9 @@ export function ExperienceContent() {
       if (!Array.isArray(parsed)) {
         return;
       }
-      const ids = parsed.filter((item: unknown): item is string => typeof item === "string");
+      const ids = parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
       setUnbookmarkedIds(ids);
     } catch {
       // Ignore invalid localStorage value
@@ -97,7 +117,9 @@ export function ExperienceContent() {
       if (!Array.isArray(parsed)) {
         return;
       }
-      const ids = parsed.filter((item: unknown): item is string => typeof item === "string");
+      const ids = parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
       setRegisteredIds(ids);
     } catch {
       // Ignore invalid localStorage value
@@ -114,7 +136,9 @@ export function ExperienceContent() {
       if (!Array.isArray(parsed)) {
         return;
       }
-      const ids = parsed.filter((item: unknown): item is string => typeof item === "string");
+      const ids = parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
       setClaimedIds(ids);
     } catch {
       // Ignore invalid localStorage value
@@ -122,19 +146,31 @@ export function ExperienceContent() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(BOOKMARK_STORAGE_KEY, JSON.stringify(bookmarkedIds));
+    window.localStorage.setItem(
+      BOOKMARK_STORAGE_KEY,
+      JSON.stringify(bookmarkedIds),
+    );
   }, [bookmarkedIds]);
 
   useEffect(() => {
-    window.localStorage.setItem(UNBOOKMARK_STORAGE_KEY, JSON.stringify(unbookmarkedIds));
+    window.localStorage.setItem(
+      UNBOOKMARK_STORAGE_KEY,
+      JSON.stringify(unbookmarkedIds),
+    );
   }, [unbookmarkedIds]);
 
   useEffect(() => {
-    window.localStorage.setItem(REGISTERED_STORAGE_KEY, JSON.stringify(registeredIds));
+    window.localStorage.setItem(
+      REGISTERED_STORAGE_KEY,
+      JSON.stringify(registeredIds),
+    );
   }, [registeredIds]);
 
   useEffect(() => {
-    window.localStorage.setItem(CLAIMED_STORAGE_KEY, JSON.stringify(claimedIds));
+    window.localStorage.setItem(
+      CLAIMED_STORAGE_KEY,
+      JSON.stringify(claimedIds),
+    );
   }, [claimedIds]);
 
   useEffect(() => {
@@ -177,11 +213,14 @@ export function ExperienceContent() {
           endDate,
         });
 
-        const response = await fetch(apiPath(`/api/events?${params.toString()}`), {
-          signal: controller.signal,
-          cache: "no-store",
-          headers: withBackendAuthHeaders(),
-        });
+        const response = await fetch(
+          apiPath(`/api/events?${params.toString()}`),
+          {
+            signal: controller.signal,
+            cache: "no-store",
+            headers: withBackendAuthHeaders(),
+          },
+        );
 
         const payload = await response.json();
         if (!response.ok || !payload.success) {
@@ -191,13 +230,13 @@ export function ExperienceContent() {
         const next = payload.data as EventsState;
         setEventsState({
           ...next,
-          items: next.items.map((item) =>
-            ({
-              ...item,
-              isBookmarked: (item.isBookmarked && !unbookmarkedIds.includes(item.id)) || bookmarkedIds.includes(item.id),
-              isRegistered: item.isRegistered || registeredIds.includes(item.id),
-            }),
-          ),
+          items: next.items.map((item) => ({
+            ...item,
+            isBookmarked:
+              (item.isBookmarked && !unbookmarkedIds.includes(item.id)) ||
+              bookmarkedIds.includes(item.id),
+            isRegistered: item.isRegistered || registeredIds.includes(item.id),
+          })),
         });
       } catch (error) {
         if (controller.signal.aborted) {
@@ -212,12 +251,33 @@ export function ExperienceContent() {
     fetchEvents();
 
     return () => controller.abort();
-  }, [activeTab, page, pageSize, search, selectedTypes, selectedFields, selectedLevels, location, bookmarkedIds, unbookmarkedIds, registeredIds, startDate, endDate]);
+  }, [
+    activeTab,
+    page,
+    pageSize,
+    search,
+    selectedTypes,
+    selectedFields,
+    selectedLevels,
+    location,
+    bookmarkedIds,
+    unbookmarkedIds,
+    registeredIds,
+    startDate,
+    endDate,
+  ]);
 
   const activeFilterCount =
-    selectedTypes.length + selectedFields.length + selectedLevels.length + (location.trim() ? 1 : 0);
+    selectedTypes.length +
+    selectedFields.length +
+    selectedLevels.length +
+    (location.trim() ? 1 : 0);
 
-  function toggleSelection(value: string, selected: string[], setSelected: (next: string[]) => void) {
+  function toggleSelection(
+    value: string,
+    selected: string[],
+    setSelected: (next: string[]) => void,
+  ) {
     if (selected.includes(value)) {
       setSelected(selected.filter((item) => item !== value));
       setPage(1);
@@ -243,8 +303,12 @@ export function ExperienceContent() {
 
   async function toggleBookmark(eventId: string) {
     const target = eventsState.items.find((item) => item.id === eventId);
-    const nextBookmarked = !(target?.isBookmarked ?? bookmarkedIds.includes(eventId));
-    const wasBookmarkedByDefault = Boolean(target?.isBookmarked && !bookmarkedIds.includes(eventId));
+    const nextBookmarked = !(
+      target?.isBookmarked ?? bookmarkedIds.includes(eventId)
+    );
+    const wasBookmarkedByDefault = Boolean(
+      target?.isBookmarked && !bookmarkedIds.includes(eventId),
+    );
 
     setEventsState((prev) => ({
       ...prev,
@@ -322,9 +386,10 @@ export function ExperienceContent() {
         }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { success?: boolean; error?: string }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        success?: boolean;
+        error?: string;
+      } | null;
 
       if (!response.ok || !payload?.success) {
         const rawError = payload?.error ?? "Unable to claim credential";
@@ -335,11 +400,16 @@ export function ExperienceContent() {
       closeClaimDialog();
       if (claimSourceEventId) {
         setClaimedIds((prev) =>
-          prev.includes(claimSourceEventId) ? prev : [...prev, claimSourceEventId],
+          prev.includes(claimSourceEventId)
+            ? prev
+            : [...prev, claimSourceEventId],
         );
       }
       setShowClaimSuccessModal(true);
-      setClaimToast({ type: "success", message: "Credential claimed successfully" });
+      setClaimToast({
+        type: "success",
+        message: "Credential claimed successfully",
+      });
     } finally {
       setIsClaimSubmitting(false);
     }
@@ -379,21 +449,29 @@ export function ExperienceContent() {
             onClear={() => setPage(1)}
           />
           <button
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border-border-brand-solid bg-background-bg-brand-solid px-4 text-body-md-medium text-white transition duration-300 hover:bg-background-bg-brand-solid-hover hover:shadow-lg active:scale-95"
+            className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-body-md-medium text-black transition duration-300 hover:shadow-lg active:scale-95 
+            ${
+              showFilters
+                ? "border border-background-bg-brand-solid bg-background-bg-brand-solid text-white"
+                : "border border-slate-200 bg-white text-black"
+            }          
+            `}
             type="button"
             onClick={() => setShowFilters((prev) => !prev)}
           >
             <Filter size={16} />
             Filter
             {activeFilterCount > 0 ? (
-              <span className="rounded-md bg-white/80 px-1.5 py-0.5 text-xs text-blue-700">{activeFilterCount}</span>
+              <span className="rounded-sm bg-white w-5 h-5 flex items-center justify-center text-sm text-blue-400">
+                {activeFilterCount}
+              </span>
             ) : null}
           </button>
         </div>
       </div>
 
       <div className="mt-3 border-b border-slate-200 pb-2">
-        <div className="flex items-center gap-1 overflow-x-auto text-sm text-slate-400 sm:gap-2">
+        <div className="flex items-center gap-1 text-sm text-slate-400 sm:gap-2">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
             return (
@@ -468,42 +546,76 @@ export function ExperienceContent() {
         </section>
 
         {showFilters ? (
-          <aside className="order-1 w-full shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white lg:order-2 lg:w-[285px]">
+          <aside className="order-1 w-full shrink-0 overflow-hidden rounded-2xl lg:order-2 lg:w-[285px]">
             <div className="h-full overflow-y-auto p-3">
-              <FilterSection title="Type" count={selectedTypes.length}>
-                {eventsState.filterOptions.types.map((type) => (
-                  <FilterCheckbox
-                    key={type}
-                    label={type}
-                    checked={selectedTypes.includes(type)}
-                    onChange={() => toggleSelection(type, selectedTypes, setSelectedTypes)}
-                  />
-                ))}
+              <FilterSection
+                title="Type"
+                valueSearch={typeSearch}
+                setValueSearch={setTypeSearch}
+              >
+                {eventsState.filterOptions.types
+                  .filter((type) =>
+                    type.toLowerCase().includes(typeSearch.toLowerCase()),
+                  )
+                  .map((type) => (
+                    <FilterCheckbox
+                      key={type}
+                      label={type}
+                      checked={selectedTypes.includes(type)}
+                      onChange={() =>
+                        toggleSelection(type, selectedTypes, setSelectedTypes)
+                      }
+                    />
+                  ))}
               </FilterSection>
 
-              <FilterSection title="Fields" count={selectedFields.length}>
-                {eventsState.filterOptions.fields.map((field) => (
-                  <FilterCheckbox
-                    key={field}
-                    label={field}
-                    checked={selectedFields.includes(field)}
-                    onChange={() => toggleSelection(field, selectedFields, setSelectedFields)}
-                  />
-                ))}
+              <FilterSection
+                title="Fields"
+                valueSearch={fieldSearch}
+                setValueSearch={setFieldSearch}
+              >
+                {eventsState.filterOptions.fields
+                  .filter((field) =>
+                    field.toLowerCase().includes(fieldSearch.toLowerCase()),
+                  )
+                  .map((field) => (
+                    <FilterCheckbox
+                      key={field}
+                      label={field}
+                      checked={selectedFields.includes(field)}
+                      onChange={() =>
+                        toggleSelection(
+                          field,
+                          selectedFields,
+                          setSelectedFields,
+                        )
+                      }
+                    />
+                  ))}
               </FilterSection>
 
-              <FilterSection title="Level" count={selectedLevels.length}>
-                {eventsState.filterOptions.levels.map((level) => (
-                  <FilterCheckbox
-                    key={level}
-                    label={level}
-                    checked={selectedLevels.includes(level)}
-                    onChange={() => toggleSelection(level, selectedLevels, setSelectedLevels)}
-                  />
-                ))}
+              <FilterSection title="Level">
+                {eventsState.filterOptions.levels
+                  .filter((level) =>
+                    level.toLowerCase().includes(levelSearch.toLowerCase()),
+                  )
+                  .map((level) => (
+                    <FilterCheckbox
+                      key={level}
+                      label={level}
+                      checked={selectedLevels.includes(level)}
+                      onChange={() =>
+                        toggleSelection(
+                          level,
+                          selectedLevels,
+                          setSelectedLevels,
+                        )
+                      }
+                    />
+                  ))}
               </FilterSection>
 
-              <FilterSection title="Location" count={location.trim() ? 1 : 0}>
+              <FilterSection title="Location">
                 <TextInput
                   value={location}
                   onChange={(event) => {
@@ -553,7 +665,9 @@ export function ExperienceContent() {
                 type="button"
                 onClick={() => setPage(item)}
                 className={`h-8 w-8 rounded-full transition ${
-                  isActive ? "bg-[#EEF5FC] text-[#3C7ACB]" : "hover:bg-slate-100"
+                  isActive
+                    ? "bg-[#EEF5FC] text-[#3C7ACB]"
+                    : "hover:bg-slate-100"
                 }`}
               >
                 {item}
@@ -564,7 +678,9 @@ export function ExperienceContent() {
           <button
             type="button"
             className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100 disabled:opacity-40"
-            onClick={() => setPage((prev) => Math.min(eventsState.totalPages, prev + 1))}
+            onClick={() =>
+              setPage((prev) => Math.min(eventsState.totalPages, prev + 1))
+            }
             disabled={eventsState.page >= eventsState.totalPages}
           >
             <ChevronRight size={16} />
@@ -581,13 +697,19 @@ export function ExperienceContent() {
         isSubmitting={isClaimSubmitting}
         onClose={closeClaimDialog}
         onPrev={() => setClaimActiveIndex((prev) => Math.max(0, prev - 1))}
-        onNext={() => setClaimActiveIndex((prev) => Math.min(claimForms.length - 1, prev + 1))}
+        onNext={() =>
+          setClaimActiveIndex((prev) =>
+            Math.min(claimForms.length - 1, prev + 1),
+          )
+        }
         onTabChange={setClaimDialogTab}
         onPrimaryAction={handleClaimPrimaryAction}
         onKeyLearningChange={(value) =>
           setClaimForms((prev) =>
             prev.map((item, index) =>
-              index === claimActiveIndex ? { ...item, keyLearning: value } : item,
+              index === claimActiveIndex
+                ? { ...item, keyLearning: value }
+                : item,
             ),
           )
         }
@@ -598,7 +720,10 @@ export function ExperienceContent() {
         onClose={() => setShowClaimSuccessModal(false)}
       />
 
-      <ClaimToastBanner toast={claimToast} onClose={() => setClaimToast(null)} />
+      <ClaimToastBanner
+        toast={claimToast}
+        onClose={() => setClaimToast(null)}
+      />
     </>
   );
 }

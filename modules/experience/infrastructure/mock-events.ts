@@ -27,7 +27,13 @@ const universities = [
   "MIT",
 ];
 
-const cities = ["Bangkok", "Chiang Mai", "Phuket", "Nakhon Ratchasima", "Khon Kaen"];
+const cities = [
+  "Bangkok",
+  "Chiang Mai",
+  "Phuket",
+  "Nakhon Ratchasima",
+  "Khon Kaen",
+];
 const countries = ["Thailand", "Singapore", "Japan"];
 
 const eventTypes: EventType[] = [
@@ -112,108 +118,219 @@ function makeItem(index: number): DashboardEvent {
   };
 }
 
-const DEMO_EVENTS: DashboardEvent[] = [
+const MOCK_EVENTS: DashboardEvent[] = [
   {
-    id: "event-demo-hackathon",
-    title: "Medelverse Demo - AI Hackathon 2026",
+    id: "event-01-bangkok-fintech-week-2026",
+    title: "Bangkok FinTech Week 2026",
     university: "Chulalongkorn University",
-    date: "Jun 15, 2026",
-    time: "9:00 AM - 6:00 PM",
-    location: "Bangkok, Thailand",
-    seats: "120 seats",
+    date: "Jun 5, 2026",
+    time: "9:00 AM - 5:30 PM",
+    location: "Bangkok International Trade & Exhibition Centre (BITEC)",
+    seats: "250 seats",
     price: "Free Registration",
     sponsored: true,
     theme: "from-cyan-900 via-slate-800 to-blue-900",
-    image: "/assets/cards/card-01.svg",
+    image: "/app/assets/cards/card-01.svg",
     isBookmarked: false,
+    isRegistered: true,
+    isHistory: false,
+    type: "Conference",
+    field: "Business & Economics",
+    level: "International Level",
+    city: "Bangkok",
+    country: "Thailand",
+  },
+  {
+    id: "event-02-asean-climate-innovation-summit",
+    title: "ASEAN Climate Innovation Summit",
+    university: "Mahidol University",
+    date: "Jun 18, 2026",
+    time: "10:00 AM - 6:00 PM",
+    location: "Online Event",
+    seats: "300 seats",
+    price: "Free Registration",
+    sponsored: false,
+    theme: "from-violet-900 via-indigo-900 to-slate-900",
+    image: "/app/assets/cards/card-02.svg",
+    isBookmarked: true,
     isRegistered: false,
     isHistory: false,
-    type: "Workshop",
-    field: "Engineering & Technology",
+    type: "Conference",
+    field: "Science & Research",
+    level: "International Level",
+    city: "Online",
+    country: "Global",
+  },
+  {
+    id: "event-03-ux-accessibility-bootcamp",
+    title: "Thailand UX & Accessibility Bootcamp",
+    university: "Kasetsart University",
+    date: "May 30, 2026",
+    time: "9:30 AM - 4:30 PM",
+    location: "Kasetsart University Camillian Campus, Bangkok",
+    seats: "90 seats",
+    price: "349 THB",
+    sponsored: false,
+    theme: "from-blue-950 via-slate-900 to-cyan-900",
+    image: "/app/assets/cards/card-03.svg",
+    isBookmarked: false,
+    isRegistered: true,
+    isHistory: false,
+    type: "Bootcamp",
+    field: "Arts & Design",
     level: "National Level",
     city: "Bangkok",
     country: "Thailand",
   },
   {
-    id: "event-demo-startup",
-    title: "Medelverse Demo - Startup Bootcamp",
+    id: "event-04-ai-industry-forum",
+    title: "Bangkok AI Industry Forum",
     university: "Thammasat University",
-    date: "Jul 10, 2026",
+    date: "May 24, 2026",
+    time: "1:00 PM - 5:00 PM",
+    location: "Thammasat Business School, Rangsit",
+    seats: "150 seats",
+    price: "499 THB",
+    sponsored: true,
+    theme: "from-fuchsia-200 via-rose-100 to-slate-100",
+    image: "/app/assets/cards/card-04.svg",
+    isBookmarked: false,
+    isRegistered: false,
+    isHistory: true,
+    type: "Workshop",
+    field: "Engineering & Technology",
+    level: "Regional / State Level",
+    city: "Pathum Thani",
+    country: "Thailand",
+  },
+  {
+    id: "event-05-digital-healthcare-lab",
+    title: "Digital Healthcare Innovation Lab",
+    university: "Mahidol University",
+    date: "Jun 12, 2026",
+    time: "9:00 AM - 3:00 PM",
+    location: "Mahidol University Salaya Campus",
+    seats: "120 seats",
+    price: "399 THB",
+    sponsored: false,
+    theme: "from-amber-700 via-rose-700 to-orange-900",
+    image: "/app/assets/cards/card-05.svg",
+    isBookmarked: true,
+    isRegistered: false,
+    isHistory: false,
+    type: "Masterclass",
+    field: "Science & Research",
+    level: "National Level",
+    city: "Nakhon Pathom",
+    country: "Thailand",
+  },
+  {
+    id: "event-06-sustainable-urban-design-workshop",
+    title: "Sustainable Urban Design Workshop",
+    university: "Chulalongkorn University",
+    date: "Dec 14, 2025",
     time: "10:00 AM - 4:00 PM",
-    location: "Bangkok, Thailand",
+    location: "Chulalongkorn University Architecture Center",
     seats: "80 seats",
+    price: "Free Registration",
+    sponsored: false,
+    theme: "from-cyan-900 via-slate-800 to-blue-900",
+    image: "/app/assets/cards/card-01.svg",
+    isBookmarked: false,
+    isRegistered: true,
+    isHistory: true,
+    type: "Workshop",
+    field: "Social Sciences",
+    level: "National Level",
+    city: "Bangkok",
+    country: "Thailand",
+  },
+  {
+    id: "event-07-global-data-science-symposium",
+    title: "Global Data Science Symposium",
+    university: "MIT",
+    date: "Jun 2, 2026",
+    time: "11:00 AM - 7:00 PM",
+    location: "Online Event",
+    seats: "400 seats",
     price: "Free Registration",
     sponsored: true,
     theme: "from-violet-900 via-indigo-900 to-slate-900",
-    image: "/assets/cards/card-02.svg",
+    image: "/app/assets/cards/card-02.svg",
+    isBookmarked: false,
+    isRegistered: false,
+    isHistory: false,
+    type: "Conference",
+    field: "Mathematics & Data",
+    level: "International Level",
+    city: "Online",
+    country: "Global",
+  },
+  {
+    id: "event-08-smart-cities-mobility-course",
+    title: "Smart Cities & Mobility Course",
+    university: "Kasetsart University",
+    date: "Apr 28, 2026",
+    time: "9:00 AM - 5:00 PM",
+    location: "Kasetsart University Bangkhen Campus",
+    seats: "100 seats",
+    price: "299 THB",
+    sponsored: false,
+    theme: "from-blue-950 via-slate-900 to-cyan-900",
+    image: "/app/assets/cards/card-03.svg",
+    isBookmarked: false,
+    isRegistered: true,
+    isHistory: true,
+    type: "Short Course",
+    field: "Engineering & Technology",
+    level: "Regional / State Level",
+    city: "Bangkok",
+    country: "Thailand",
+  },
+  {
+    id: "event-09-edtech-startup-sprint",
+    title: "EdTech Startup Sprint",
+    university: "Thammasat University",
+    date: "Jun 20, 2026",
+    time: "10:00 AM - 6:00 PM",
+    location: "Thammasat University Innovation Center",
+    seats: "70 seats",
+    price: "499 THB",
+    sponsored: true,
+    theme: "from-fuchsia-200 via-rose-100 to-slate-100",
+    image: "/app/assets/cards/card-04.svg",
     isBookmarked: false,
     isRegistered: false,
     isHistory: false,
     type: "Bootcamp",
     field: "Business & Economics",
     level: "Regional / State Level",
-    city: "Bangkok",
+    city: "Pathum Thani",
     country: "Thailand",
   },
   {
-    id: "event-demo-ux",
-    title: "Medelverse Demo - UX Masterclass",
-    university: "Mahidol University",
-    date: "Aug 20, 2026",
-    time: "1:00 PM - 5:00 PM",
-    location: "Online Event",
-    seats: "200 seats",
-    price: "299 THB",
+    id: "event-10-cybersecurity-awareness-week",
+    title: "Cybersecurity Awareness Week",
+    university: "Bangkok University",
+    date: "Dec 10, 2025",
+    time: "9:30 AM - 4:00 PM",
+    location: "Bangkok University City Campus",
+    seats: "110 seats",
+    price: "Free Registration",
     sponsored: false,
-    theme: "from-blue-950 via-slate-900 to-cyan-900",
-    image: "/assets/cards/card-03.svg",
-    isBookmarked: false,
-    isRegistered: false,
-    isHistory: false,
-    type: "Masterclass",
-    field: "Arts & Design",
-    level: "International Level",
+    theme: "from-amber-700 via-rose-700 to-orange-900",
+    image: "/app/assets/cards/card-05.svg",
+    isBookmarked: true,
+    isRegistered: true,
+    isHistory: true,
+    type: "Workshop",
+    field: "Law, Policy & Governance",
+    level: "Local / District Level",
     city: "Bangkok",
     country: "Thailand",
   },
 ];
 
-const MOCK_EVENTS: DashboardEvent[] = [
-  ...DEMO_EVENTS,
-  ...Array.from({ length: 80 }, (_, i) => makeItem(i)),
-];
-// Ensure clear mock cases for tab/register flow (skip demo entries at the front).
-const demoOffset = DEMO_EVENTS.length;
-if (MOCK_EVENTS[demoOffset]) {
-  MOCK_EVENTS[demoOffset].date = "Oct 15, 2026";
-  MOCK_EVENTS[demoOffset].isRegistered = false;
-  MOCK_EVENTS[demoOffset].isHistory = false;
-}
-if (MOCK_EVENTS[demoOffset + 1]) {
-  MOCK_EVENTS[demoOffset + 1].date = "Nov 5, 2026";
-  MOCK_EVENTS[demoOffset + 1].isRegistered = false;
-  MOCK_EVENTS[demoOffset + 1].isHistory = false;
-}
-if (MOCK_EVENTS[demoOffset + 2]) {
-  MOCK_EVENTS[demoOffset + 2].date = "Dec 5, 2025";
-  MOCK_EVENTS[demoOffset + 2].isRegistered = false;
-  MOCK_EVENTS[demoOffset + 2].isHistory = true;
-}
-if (MOCK_EVENTS[demoOffset + 3]) {
-  MOCK_EVENTS[demoOffset + 3].date = "Oct 16, 2025";
-  MOCK_EVENTS[demoOffset + 3].isRegistered = false;
-  MOCK_EVENTS[demoOffset + 3].isHistory = true;
-}
-if (MOCK_EVENTS[demoOffset + 4]) {
-  MOCK_EVENTS[demoOffset + 4].date = "Jan 20, 2026";
-  MOCK_EVENTS[demoOffset + 4].isRegistered = true;
-  MOCK_EVENTS[demoOffset + 4].isHistory = false;
-}
-if (MOCK_EVENTS[demoOffset + 5]) {
-  MOCK_EVENTS[demoOffset + 5].date = "Feb 10, 2026";
-  MOCK_EVENTS[demoOffset + 5].isRegistered = true;
-  MOCK_EVENTS[demoOffset + 5].isHistory = false;
-}
 const PERSON_AVATARS = [
   "/app/assets/logos/medalverse-logo.svg",
   "/app/assets/logos/medalverse-logo.svg",
@@ -241,7 +358,11 @@ function parseEventDate(value: string) {
     return 0;
   }
   const [, mon, day, year] = match;
-  return new Date(Number(year), (MONTH_ORDER[mon] ?? 1) - 1, Number(day)).getTime();
+  return new Date(
+    Number(year),
+    (MONTH_ORDER[mon] ?? 1) - 1,
+    Number(day),
+  ).getTime();
 }
 
 function applySort(items: DashboardEvent[], sort: SortKey) {
@@ -291,7 +412,8 @@ export function queryMockEvents(query: EventsQuery) {
     }
 
     if (normalizedSearch) {
-      const searchable = `${event.title} ${event.university} ${event.location}`.toLowerCase();
+      const searchable =
+        `${event.title} ${event.university} ${event.location}`.toLowerCase();
       if (!searchable.includes(normalizedSearch)) {
         return false;
       }
@@ -311,7 +433,8 @@ export function queryMockEvents(query: EventsQuery) {
 
     if (query.location.trim()) {
       const keyword = query.location.trim().toLowerCase();
-      const target = `${event.city} ${event.country} ${event.location}`.toLowerCase();
+      const target =
+        `${event.city} ${event.country} ${event.location}`.toLowerCase();
       if (!target.includes(keyword)) {
         return false;
       }
@@ -348,9 +471,9 @@ export function getRecommendedEvents(eventId: string, count = 4) {
     return [];
   }
 
-  return MOCK_EVENTS
-    .filter((event) => event.id !== eventId && event.type === sourceEvent.type)
-    .slice(0, count);
+  return MOCK_EVENTS.filter(
+    (event) => event.id !== eventId && event.type === sourceEvent.type,
+  ).slice(0, count);
 }
 
 export function getMockEventDetail(eventId: string): EventDetail | null {
@@ -359,7 +482,8 @@ export function getMockEventDetail(eventId: string): EventDetail | null {
     return null;
   }
 
-  const isProductManagementEssentials = event.title === "Product Management Essentials";
+  const isProductManagementEssentials =
+    event.title === "Product Management Essentials";
 
   const overview = isProductManagementEssentials
     ? "This intensive Product Management Essentials workshop is built for learners who want to understand how successful digital products are planned, launched, and improved. You will explore the end-to-end product lifecycle, from identifying user pain points and validating ideas to defining strategy, prioritizing features, and measuring impact. Through case-based activities, you will practice framing product goals, writing clear problem statements, and translating research findings into actionable roadmaps. The session also covers stakeholder communication, experiment design, and decision-making under constraints so you can balance business outcomes with user value. By the end of the workshop, you will be able to structure product discovery, align cross-functional teams, and present product recommendations with confidence understand how successful digital products are planned, launched, and improved. You will explore the end-to-end product lifecycle, from identifying user pain points and validating ideas to defining strategy, prioritizing features, and measuring impact. Through case-based activities, you will practice framing product goals, writing clear problem statements, and translating research findings into actionable roadmaps. The session also covers stakeholder communication, experiment design, and decision-making under constraints so you can balance business outcomes with user value. By the end of the workshop, you will be able to structure product discovery, align cross-functional teams, and present product recommendations with confidence."
@@ -434,7 +558,8 @@ export function getMockEventDetail(eventId: string): EventDetail | null {
       id: `${event.id}-credential-2`,
       type: "Certificate",
       title: `${event.title} Certificate of Completion`,
-      description: "Issued to participants who completed all required sessions and submitted the final assignment.",
+      description:
+        "Issued to participants who completed all required sessions and submitted the final assignment.",
       organization: event.university,
       verified: true,
       requirement: "Complete all sessions and submit the final assignment",
@@ -457,10 +582,26 @@ export function getMockEventDetail(eventId: string): EventDetail | null {
       "Improve collaboration and communication in teams",
     ],
     agenda: [
-      { time: "9:00 PM", topic: "Welcome & Introduction", description: "Overview of event and learning outcomes." },
-      { time: "9:30 PM", topic: "Core Fundamentals", description: "Hands-on walkthrough of main concepts." },
-      { time: "10:30 PM", topic: "Workshop Practice", description: "Interactive practice and feedback session." },
-      { time: "11:30 PM", topic: "Q&A + Wrap Up", description: "Summary and next-step recommendations." },
+      {
+        time: "9:00 PM",
+        topic: "Welcome & Introduction",
+        description: "Overview of event and learning outcomes.",
+      },
+      {
+        time: "9:30 PM",
+        topic: "Core Fundamentals",
+        description: "Hands-on walkthrough of main concepts.",
+      },
+      {
+        time: "10:30 PM",
+        topic: "Workshop Practice",
+        description: "Interactive practice and feedback session.",
+      },
+      {
+        time: "11:30 PM",
+        topic: "Q&A + Wrap Up",
+        description: "Summary and next-step recommendations.",
+      },
     ],
     speakers,
     organizer: {

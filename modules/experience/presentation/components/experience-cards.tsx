@@ -1,7 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Calendar, CircleStar, Clock3, FileBadge2, MapPin, Medal, Trophy, Users } from "lucide-react";
+import {
+  Bookmark,
+  Calendar,
+  Check,
+  CircleStar,
+  Clock3,
+  FileBadge2,
+  MapPin,
+  Medal,
+  Trophy,
+  Users,
+} from "lucide-react";
 import { DashboardEvent } from "@/modules/experience/domain/dashboard.types";
 import { isEventStillActive } from "../experience-content.utils";
 
@@ -34,7 +45,10 @@ function CardHero({ card }: { card: DashboardEvent }) {
             key={`${card.id}-${index}`}
             className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/65 bg-white/8 text-white shadow-[0_6px_18px_rgba(15,23,42,0.18)] backdrop-blur-md"
           >
-            <Icon size={14} className="drop-shadow-[0_1px_1px_rgba(15,23,42,0.35)]" />
+            <Icon
+              size={14}
+              className="drop-shadow-[0_1px_1px_rgba(15,23,42,0.35)]"
+            />
           </span>
         ))}
       </div>
@@ -61,7 +75,7 @@ function CardHeader({
         }}
         className={`absolute right-3 top-[10px] z-10 flex h-9 w-9 items-center justify-center rounded-full border bg-white/95 shadow transition duration-300 hover:scale-105 ${
           card.isBookmarked
-            ? "border-blue-200 text-blue-600"
+            ? "border-slate-200 text-blue-600"
             : "border-slate-100 text-slate-300 hover:border-blue-200 hover:text-blue-600"
         }`}
       >
@@ -69,8 +83,12 @@ function CardHeader({
       </button>
       <div className="flex h-[62px] shrink-0 flex-col">
         <div className="flex flex-1 flex-col justify-center pr-10">
-          <p className="line-clamp-2 text-sm font-medium leading-[1.32] text-slate-800">{card.title}</p>
-          <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-500">{card.university}</p>
+          <p className="line-clamp-2 text-sm font-medium leading-[1.32] text-slate-800">
+            {card.title}
+          </p>
+          <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-500">
+            {card.university}
+          </p>
         </div>
         <div className="h-px w-full bg-[#edf1f5]" />
       </div>
@@ -91,21 +109,54 @@ export function EventCard({
         <CardHero card={card} />
         <div className="relative flex min-h-0 flex-1 flex-col px-3.5 py-3">
           <CardHeader card={card} onToggleBookmark={onToggleBookmark} />
+
           <ul className="mt-2 space-y-1.5 text-[11px] leading-4 text-slate-500">
             <li className="flex items-center gap-1.5">
-              <MetaIcon><Calendar size={10} /></MetaIcon>{card.date}
+              <MetaIcon>
+                <Calendar size={10} />
+              </MetaIcon>
+              {card.date}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIcon><Clock3 size={10} /></MetaIcon>{card.time}
+              <MetaIcon>
+                <Clock3 size={10} />
+              </MetaIcon>
+              {card.time}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIcon><MapPin size={10} /></MetaIcon>{card.location}
+              <MetaIcon>
+                <MapPin size={10} />
+              </MetaIcon>
+              {card.location}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIcon><Users size={10} /></MetaIcon>{card.seats}
+              <MetaIcon>
+                <Users size={10} />
+              </MetaIcon>
+              {card.seats}
             </li>
           </ul>
-          <p className={`mt-auto pt-3 text-[14px] font-semibold ${card.price.includes("Free") ? "text-emerald-600" : "text-cyan-700"}`}>{card.price}</p>
+          {card.isRegistered ? (
+            <div className="mt-auto pt-3 text-[14px] font-normal text-[var(--color-text-brand-primary)]">
+              <MetaIcon>
+                <Check size={12} />
+              </MetaIcon>
+              <span className={"ml-1"}>Registered</span>
+            </div>
+          ) : (
+            <p
+              className={`mt-auto pt-3 text-[14px] font-normal ${card.price.includes("Free") ? "text-[var(--color-success-600)]" : "text-[var(--color-success-600)]"}`}
+            >
+              {card.price.includes("Free") ? (
+                <MetaIcon>
+                  <Check size={12} color="var(--color-success-600)" />
+                </MetaIcon>
+              ) : null}
+              <span className={card.price.includes("Free") ? "ml-1" : ""}>
+                {card.price}
+              </span>
+            </p>
+          )}
         </div>
       </article>
     </Link>
@@ -137,13 +188,36 @@ export function RegisterEventCard({
         <div className="relative flex min-h-0 flex-1 flex-col px-3.5 py-3">
           <CardHeader card={card} onToggleBookmark={onToggleBookmark} />
           <ul className="mt-2 space-y-1.5 text-[11px] leading-4 text-slate-500">
-            <li className="flex items-center gap-1.5"><MetaIcon><Calendar size={10} /></MetaIcon>{card.date}</li>
-            <li className="flex items-center gap-1.5"><MetaIcon><Clock3 size={10} /></MetaIcon>{card.time}</li>
-            <li className="flex items-center gap-1.5"><MetaIcon><MapPin size={10} /></MetaIcon>{card.location}</li>
             <li className="flex items-center gap-1.5">
-              <MetaIcon><FileBadge2 size={10} /></MetaIcon>
+              <MetaIcon>
+                <Calendar size={10} />
+              </MetaIcon>
+              {card.date}
+            </li>
+            <li className="flex items-center gap-1.5">
+              <MetaIcon>
+                <Clock3 size={10} />
+              </MetaIcon>
+              {card.time}
+            </li>
+            <li className="flex items-center gap-1.5">
+              <MetaIcon>
+                <MapPin size={10} />
+              </MetaIcon>
+              {card.location}
+            </li>
+            <li className="flex items-center gap-1.5">
+              <MetaIcon>
+                <FileBadge2 size={10} />
+              </MetaIcon>
               Credential Issued
-              <span className={claimStatus === "pending" ? "text-slate-400" : "text-text-brand-primary"}>
+              <span
+                className={
+                  claimStatus === "pending"
+                    ? "text-slate-400"
+                    : "text-text-brand-primary"
+                }
+              >
                 {claimStatus === "pending" ? "Pending" : card.date}
               </span>
             </li>

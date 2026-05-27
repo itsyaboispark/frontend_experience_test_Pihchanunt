@@ -3,10 +3,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { ArrowLeft, Bookmark, Calendar, CalendarClock, ChevronLeft, ChevronRight, CircleStar, Clock3, FileBadge2, MapPin, Medal, Share2, FileText, Trophy, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  Bookmark,
+  Calendar,
+  CalendarClock,
+  ChevronLeft,
+  ChevronRight,
+  CircleStar,
+  Clock3,
+  FileBadge2,
+  MapPin,
+  Medal,
+  Share2,
+  FileText,
+  Trophy,
+  Users,
+  Clock,
+  Clock2,
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { EventDetail } from "@/modules/experience/domain/dashboard.types";
-import { ClaimDialog, ClaimSuccessModal, ClaimToastBanner } from "./components/claim-dialog";
+import {
+  ClaimDialog,
+  ClaimSuccessModal,
+  ClaimToastBanner,
+} from "./components/claim-dialog";
 import { buildClaimFormsForEvent } from "./experience-content.utils";
 import { ClaimDialogForm, ClaimToast } from "./experience-content.types";
 import { withBackendAuthHeaders } from "@/shared/auth/backend-access-token.client";
@@ -29,7 +51,9 @@ export function EventDetailScreen({ eventId }: Props) {
   const [showOutcomesDialog, setShowOutcomesDialog] = useState(false);
   const [claimedIds, setClaimedIds] = useState<string[]>([]);
   const [showClaimDialog, setShowClaimDialog] = useState(false);
-  const [claimDialogTab, setClaimDialogTab] = useState<"credential" | "event">("credential");
+  const [claimDialogTab, setClaimDialogTab] = useState<"credential" | "event">(
+    "credential",
+  );
   const [claimForms, setClaimForms] = useState<ClaimDialogForm[]>([]);
   const [claimActiveIndex, setClaimActiveIndex] = useState(0);
   const [isClaimSubmitting, setIsClaimSubmitting] = useState(false);
@@ -49,7 +73,9 @@ export function EventDetailScreen({ eventId }: Props) {
       if (!Array.isArray(parsed)) {
         return [];
       }
-      return parsed.filter((item: unknown): item is string => typeof item === "string");
+      return parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
     } catch {
       return [];
     }
@@ -67,7 +93,9 @@ export function EventDetailScreen({ eventId }: Props) {
       if (!Array.isArray(parsed)) {
         return [];
       }
-      return parsed.filter((item: unknown): item is string => typeof item === "string");
+      return parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
     } catch {
       return [];
     }
@@ -78,11 +106,17 @@ export function EventDetailScreen({ eventId }: Props) {
   const recommendedScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.localStorage.setItem(BOOKMARK_STORAGE_KEY, JSON.stringify(bookmarkedIds));
+    window.localStorage.setItem(
+      BOOKMARK_STORAGE_KEY,
+      JSON.stringify(bookmarkedIds),
+    );
   }, [bookmarkedIds]);
 
   useEffect(() => {
-    window.localStorage.setItem(REGISTERED_STORAGE_KEY, JSON.stringify(registeredIds));
+    window.localStorage.setItem(
+      REGISTERED_STORAGE_KEY,
+      JSON.stringify(registeredIds),
+    );
   }, [registeredIds]);
 
   useEffect(() => {
@@ -95,7 +129,9 @@ export function EventDetailScreen({ eventId }: Props) {
       if (!Array.isArray(parsed)) {
         return;
       }
-      const ids = parsed.filter((item: unknown): item is string => typeof item === "string");
+      const ids = parsed.filter(
+        (item: unknown): item is string => typeof item === "string",
+      );
       setClaimedIds(ids);
     } catch {
       // Ignore invalid localStorage value
@@ -103,7 +139,10 @@ export function EventDetailScreen({ eventId }: Props) {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(CLAIMED_STORAGE_KEY, JSON.stringify(claimedIds));
+    window.localStorage.setItem(
+      CLAIMED_STORAGE_KEY,
+      JSON.stringify(claimedIds),
+    );
   }, [claimedIds]);
 
   useEffect(() => {
@@ -147,10 +186,11 @@ export function EventDetailScreen({ eventId }: Props) {
 
   const event = data?.event;
   const isBookmarked = Boolean(event && bookmarkedIds.includes(event.id));
-  const isRegistered = Boolean(event && (event.isRegistered || registeredIds.includes(event.id)));
+  const isRegistered = Boolean(
+    event && (event.isRegistered || registeredIds.includes(event.id)),
+  );
   const isHistoryMode = Boolean(event && event.isHistory);
-  const isRegisterMode =
-    Boolean(event) && isRegistered && !isHistoryMode;
+  const isRegisterMode = Boolean(event) && isRegistered && !isHistoryMode;
   const isClaimed = Boolean(event && claimedIds.includes(event.id));
   const credentials = data?.credentials ?? [];
   const credentialCount = credentials.length;
@@ -168,7 +208,9 @@ export function EventDetailScreen({ eventId }: Props) {
 
   function toggleBookmarkById(targetId: string) {
     setBookmarkedIds((prev) =>
-      prev.includes(targetId) ? prev.filter((id) => id !== targetId) : [...prev, targetId],
+      prev.includes(targetId)
+        ? prev.filter((id) => id !== targetId)
+        : [...prev, targetId],
     );
   }
 
@@ -222,9 +264,10 @@ export function EventDetailScreen({ eventId }: Props) {
         }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { success?: boolean; error?: string }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        success?: boolean;
+        error?: string;
+      } | null;
 
       if (!response.ok || !payload?.success) {
         const rawError = payload?.error ?? "Unable to claim credential";
@@ -235,11 +278,16 @@ export function EventDetailScreen({ eventId }: Props) {
       closeClaimDialog();
       if (claimSourceEventId) {
         setClaimedIds((prev) =>
-          prev.includes(claimSourceEventId) ? prev : [...prev, claimSourceEventId],
+          prev.includes(claimSourceEventId)
+            ? prev
+            : [...prev, claimSourceEventId],
         );
       }
       setShowClaimSuccessModal(true);
-      setClaimToast({ type: "success", message: "Credential claimed successfully" });
+      setClaimToast({
+        type: "success",
+        message: "Credential claimed successfully",
+      });
     } finally {
       setIsClaimSubmitting(false);
     }
@@ -256,7 +304,10 @@ export function EventDetailScreen({ eventId }: Props) {
             <ArrowLeft size={14} />
             Back
           </Link>
-          <button className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 text-sm text-slate-600 shadow-[0_2px_10px_rgba(15,23,42,0.06)] hover:bg-white" type="button">
+          <button
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 text-sm text-slate-600 shadow-[0_2px_10px_rgba(15,23,42,0.06)] hover:bg-white"
+            type="button"
+          >
             <Share2 size={14} />
             Share
           </button>
@@ -270,17 +321,42 @@ export function EventDetailScreen({ eventId }: Props) {
           <section className="min-w-0 flex-1 overflow-y-auto pr-1">
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="relative h-[250px]">
-                <Image src={event!.image} alt={event!.title} fill className="object-cover" />
+                <Image
+                  src={event!.image}
+                  alt={event!.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="p-5">
-                <h1 className="text-3xl font-medium text-slate-800">{event!.title}</h1>
-                <p className="mt-1 text-sm text-slate-500">{event!.university}</p>
+                <h1 className="text-3xl font-medium text-slate-800">
+                  {event!.title}
+                </h1>
+                <p className="mt-1 text-sm text-slate-500">
+                  {event!.university}
+                </p>
 
                 <div className="mt-6 grid grid-cols-2 gap-x-8 gap-y-4 text-sm text-slate-700">
-                  <MetaRow icon={<CalendarClock size={18} />} label="Date & Time" value={`${event!.date} - ${event!.time}`} />
-                  <MetaRow icon={<MapPin size={18} />} label="Location" value={event!.location} />
-                  <MetaRow icon={<Calendar size={18} />} label="Registration Deadline" value={event!.date} />
-                  <MetaRow icon={<Users size={18} />} label="Available seats" value={event!.seats} />
+                  <MetaRow
+                    icon={<CalendarClock size={18} />}
+                    label="Date & Time"
+                    value={`${event!.date} - ${event!.time}`}
+                  />
+                  <MetaRow
+                    icon={<MapPin size={18} />}
+                    label="Location"
+                    value={event!.location}
+                  />
+                  <MetaRow
+                    icon={<Calendar size={18} />}
+                    label="Registration Deadline"
+                    value={event!.date}
+                  />
+                  <MetaRow
+                    icon={<Users size={18} />}
+                    label="Available seats"
+                    value={event!.seats}
+                  />
                 </div>
 
                 <Section title="Overview">
@@ -294,7 +370,10 @@ export function EventDetailScreen({ eventId }: Props) {
                 <Section title="Eligibility">
                   <div className="flex flex-wrap gap-2">
                     {data.eligibility.map((item) => (
-                      <span key={item} className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs text-emerald-700">
+                      <span
+                        key={item}
+                        className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs text-emerald-700"
+                      >
                         {item}
                       </span>
                     ))}
@@ -305,7 +384,12 @@ export function EventDetailScreen({ eventId }: Props) {
                   <div className="mb-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() => outcomesScrollRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
+                      onClick={() =>
+                        outcomesScrollRef.current?.scrollBy({
+                          left: -320,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll outcomes left"
                     >
@@ -313,16 +397,27 @@ export function EventDetailScreen({ eventId }: Props) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => outcomesScrollRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
+                      onClick={() =>
+                        outcomesScrollRef.current?.scrollBy({
+                          left: 320,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll outcomes right"
                     >
                       <ChevronRight size={18} />
                     </button>
                   </div>
-                  <div ref={outcomesScrollRef} className="flex gap-3 overflow-x-auto pb-2">
+                  <div
+                    ref={outcomesScrollRef}
+                    className="flex gap-3 overflow-x-auto pb-2"
+                  >
                     {data.outcomes.map((item) => (
-                      <div key={item} className="min-w-[260px] rounded-xl border border-[#bfdcff] bg-[#f7fbff] p-3 text-sm text-[#2d5c9b]">
+                      <div
+                        key={item}
+                        className="min-w-[260px] rounded-xl border border-[#bfdcff] bg-[#f7fbff] p-3 text-sm text-[#2d5c9b]"
+                      >
                         {item}
                       </div>
                     ))}
@@ -343,13 +438,21 @@ export function EventDetailScreen({ eventId }: Props) {
                 <Section title="Agenda">
                   <div className="space-y-2 rounded-xl border border-slate-200 bg-white">
                     {data.agenda.map((row) => (
-                      <div key={`${row.time}-${row.topic}`} className="grid grid-cols-[92px_1fr] gap-3 border-b border-slate-100 p-3 last:border-b-0">
+                      <div
+                        key={`${row.time}-${row.topic}`}
+                        className="grid grid-cols-[92px_1fr] gap-3 border-b border-slate-100 p-3 last:border-b-0"
+                      >
                         <div className="inline-flex h-7 w-[84px] items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-500">
+                          <Clock2 size={16} className="mr-1" />
                           {row.time}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-slate-700">{row.topic}</p>
-                          <p className="text-xs text-slate-500">{row.description}</p>
+                          <p className="text-sm font-semibold text-slate-700">
+                            {row.topic}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            {row.description}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -360,7 +463,12 @@ export function EventDetailScreen({ eventId }: Props) {
                   <div className="mb-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() => speakersScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })}
+                      onClick={() =>
+                        speakersScrollRef.current?.scrollBy({
+                          left: -360,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll speakers left"
                     >
@@ -368,25 +476,47 @@ export function EventDetailScreen({ eventId }: Props) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => speakersScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })}
+                      onClick={() =>
+                        speakersScrollRef.current?.scrollBy({
+                          left: 360,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll speakers right"
                     >
                       <ChevronRight size={18} />
                     </button>
                   </div>
-                  <div ref={speakersScrollRef} className="flex gap-8 overflow-x-auto pb-2">
+                  <div
+                    ref={speakersScrollRef}
+                    className="flex gap-8 overflow-x-auto pb-2"
+                  >
                     {data.speakers.map((speaker) => (
-                      <div key={speaker.id} className="min-w-[300px] max-w-[520px] py-2">
+                      <div
+                        key={speaker.id}
+                        className="min-w-[300px] max-w-[520px] py-2"
+                      >
                         <div className="flex items-center gap-4">
-                          <Image src={speaker.avatar} alt={speaker.name} width={36} height={36} className="rounded-full" />
+                          <Image
+                            src={speaker.avatar}
+                            alt={speaker.name}
+                            width={36}
+                            height={36}
+                            className="rounded-full"
+                          />
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-slate-800">{speaker.name}</p>
-                            <p className="text-sm text-slate-600">{speaker.role}</p>
+                            <p className="text-sm font-semibold text-slate-800">
+                              {speaker.name}
+                            </p>
+                            <p className="text-sm text-slate-600">
+                              {speaker.role}
+                            </p>
                           </div>
                         </div>
                         <p className="mt-3 text-sm leading-5 text-slate-600">
-                          {speaker.bio ?? "A senior academic specializing in computer science research and education, with expertise in areas such as artificial intelligence."}
+                          {speaker.bio ??
+                            "A senior academic specializing in computer science research and education, with expertise in areas such as artificial intelligence."}
                         </p>
                       </div>
                     ))}
@@ -396,28 +526,54 @@ export function EventDetailScreen({ eventId }: Props) {
                 <Section title="Organizer">
                   <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/40 px-6 py-5">
                     <div className="flex items-center gap-5">
-                      <Image src={data.organizer.avatar} alt={data.organizer.name} width={96} height={96} className="rounded-full" />
+                      <Image
+                        src={data.organizer.avatar}
+                        alt={data.organizer.name}
+                        width={96}
+                        height={96}
+                        className="rounded-full"
+                      />
                       <div>
                         <p className="inline-flex items-center gap-2 text-lg font-semibold text-slate-800">
                           {data.organizer.name}
-                          {data.organizer.verified ? <VerifiedBadgeImage size={24} /> : null}
+                          {data.organizer.verified ? (
+                            <VerifiedBadgeImage size={24} />
+                          ) : null}
                         </p>
                         <div className="mt-3 flex items-center text-slate-700">
-                          <StatItem label="Followers" value={`${data.organizer.followers}`} />
+                          <StatItem
+                            label="Followers"
+                            value={`${data.organizer.followers}`}
+                          />
                           <Divider />
-                          <StatItem label="Events" value={`${data.organizer.events}`} />
+                          <StatItem
+                            label="Events"
+                            value={`${data.organizer.events}`}
+                          />
                           <Divider />
-                          <StatItem label="Hosting" value={`${data.organizer.hostingYears} Years`} />
+                          <StatItem
+                            label="Hosting"
+                            value={`${data.organizer.hostingYears} Years`}
+                          />
                           <Divider />
-                          <StatItem label="Credential Issued" value={`${data.organizer.events}`} />
+                          <StatItem
+                            label="Credential Issued"
+                            value={`${data.organizer.events}`}
+                          />
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button className="h-10 min-w-[120px] rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-[0_2px_10px_rgba(15,23,42,0.06)]" type="button">
+                      <button
+                        className="h-10 min-w-[120px] rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-[0_2px_10px_rgba(15,23,42,0.06)]"
+                        type="button"
+                      >
                         Contact
                       </button>
-                      <button className="h-10 min-w-[120px] rounded-xl bg-slate-900 px-6 text-sm font-semibold text-white shadow-[0_2px_10px_rgba(15,23,42,0.12)]" type="button">
+                      <button
+                        className="h-10 min-w-[120px] rounded-xl bg-slate-900 px-6 text-sm font-semibold text-white shadow-[0_2px_10px_rgba(15,23,42,0.12)]"
+                        type="button"
+                      >
                         Follow
                       </button>
                     </div>
@@ -425,10 +581,17 @@ export function EventDetailScreen({ eventId }: Props) {
                 </Section>
 
                 <Section title="Location">
-                  <p className="text-sm font-semibold text-slate-700">{data.venue.name}</p>
+                  <p className="text-sm font-semibold text-slate-700">
+                    {data.venue.name}
+                  </p>
                   <p className="text-sm text-slate-500">{data.venue.address}</p>
                   <div className="relative mt-3 h-[280px] overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                    <Image src="/assets/maps/bangkok-map.svg" alt="Bangkok map" fill className="object-cover" />
+                    <Image
+                      src="/assets/maps/bangkok-map.svg"
+                      alt="Bangkok map"
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </Section>
 
@@ -438,7 +601,12 @@ export function EventDetailScreen({ eventId }: Props) {
                       <div className="mb-2 flex items-center justify-end gap-2">
                         <button
                           type="button"
-                          onClick={() => galleryScrollRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
+                          onClick={() =>
+                            galleryScrollRef.current?.scrollBy({
+                              left: -320,
+                              behavior: "smooth",
+                            })
+                          }
                           className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                           aria-label="Scroll gallery left"
                         >
@@ -446,17 +614,33 @@ export function EventDetailScreen({ eventId }: Props) {
                         </button>
                         <button
                           type="button"
-                          onClick={() => galleryScrollRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
+                          onClick={() =>
+                            galleryScrollRef.current?.scrollBy({
+                              left: 320,
+                              behavior: "smooth",
+                            })
+                          }
                           className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                           aria-label="Scroll gallery right"
                         >
                           <ChevronRight size={18} />
                         </button>
                       </div>
-                      <div ref={galleryScrollRef} className="flex gap-2 overflow-x-auto pb-2">
+                      <div
+                        ref={galleryScrollRef}
+                        className="flex gap-2 overflow-x-auto pb-2"
+                      >
                         {galleryImages.map((img, index) => (
-                          <div key={`${img}-${index}`} className="relative h-[138px] min-w-[184px] overflow-hidden rounded-lg border border-slate-200">
-                            <Image src={img} alt="Gallery" fill className="object-cover" />
+                          <div
+                            key={`${img}-${index}`}
+                            className="relative h-[138px] min-w-[184px] overflow-hidden rounded-lg border border-slate-200"
+                          >
+                            <Image
+                              src={img}
+                              alt="Gallery"
+                              fill
+                              className="object-cover"
+                            />
                           </div>
                         ))}
                       </div>
@@ -472,7 +656,12 @@ export function EventDetailScreen({ eventId }: Props) {
                   <div className="mb-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() => recommendedScrollRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
+                      onClick={() =>
+                        recommendedScrollRef.current?.scrollBy({
+                          left: -320,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll recommended left"
                     >
@@ -480,14 +669,22 @@ export function EventDetailScreen({ eventId }: Props) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => recommendedScrollRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
+                      onClick={() =>
+                        recommendedScrollRef.current?.scrollBy({
+                          left: 320,
+                          behavior: "smooth",
+                        })
+                      }
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
                       aria-label="Scroll recommended right"
                     >
                       <ChevronRight size={18} />
                     </button>
                   </div>
-                  <div ref={recommendedScrollRef} className="flex gap-4 overflow-x-auto pb-2">
+                  <div
+                    ref={recommendedScrollRef}
+                    className="flex gap-4 overflow-x-auto pb-2"
+                  >
                     {recommendedBySameType.map((item) => (
                       <RecommendedEventCard
                         key={item.id}
@@ -496,7 +693,9 @@ export function EventDetailScreen({ eventId }: Props) {
                       />
                     ))}
                     {recommendedBySameType.length === 0 ? (
-                      <p className="py-6 text-sm text-slate-500">No recommended experiences with the same tag yet.</p>
+                      <p className="py-6 text-sm text-slate-500">
+                        No recommended experiences with the same tag yet.
+                      </p>
                     ) : null}
                   </div>
                 </Section>
@@ -510,9 +709,14 @@ export function EventDetailScreen({ eventId }: Props) {
                 {isHistoryMode ? (
                   <>
                     <div className="rounded-xl border border-slate-200 p-3 text-center">
-                      <p className="text-lg font-semibold leading-tight text-slate-800">Event Completed</p>
+                      <p className="text-lg font-semibold leading-tight text-slate-800">
+                        Event Completed
+                      </p>
                       <p className="mt-1 text-sm text-slate-500">
-                        {event!.date} {event!.time !== "Time to be announced" ? event!.time : ""}
+                        {event!.date}{" "}
+                        {event!.time !== "Time to be announced"
+                          ? event!.time
+                          : ""}
                       </p>
                     </div>
                     {!isClaimed ? (
@@ -528,7 +732,9 @@ export function EventDetailScreen({ eventId }: Props) {
                 ) : (
                   <>
                     <div>
-                      <p className="text-sm text-center">{isRegisterMode ? "Start in" : "Time Remaining"}</p>
+                      <p className="text-sm text-center">
+                        {isRegisterMode ? "Start in" : "Time Remaining"}
+                      </p>
                       <div className="mt-2 grid grid-cols-3 gap-2 text-center">
                         <MiniStat label="Days" value="48" />
                         <MiniStat label="Hours" value="21" />
@@ -537,12 +743,17 @@ export function EventDetailScreen({ eventId }: Props) {
                     </div>
                     <div>
                       <p className="mt-3 text-center text-sm text-slate-500">
-                        {event!.date} {event!.time !== "Time to be announced" ? event!.time : ""}
+                        {event!.date}{" "}
+                        {event!.time !== "Time to be announced"
+                          ? event!.time
+                          : ""}
                       </p>
                     </div>
                     {!isRegisterMode ? (
                       <div className="mt-3 rounded-xl border border-slate-200 p-3 text-center">
-                        <p className="text-3xl font-semibold text-slate-800">{event!.price}</p>
+                        <p className="text-3xl font-semibold text-slate-800">
+                          {event!.price}
+                        </p>
                         <p className="text-xs text-slate-500">15 seats left</p>
                       </div>
                     ) : null}
@@ -557,7 +768,9 @@ export function EventDetailScreen({ eventId }: Props) {
                         if (isRegisterMode) {
                           return;
                         }
-                        setRegisteredIds((prev) => (prev.includes(event.id) ? prev : [...prev, event.id]));
+                        setRegisteredIds((prev) =>
+                          prev.includes(event.id) ? prev : [...prev, event.id],
+                        );
                       }}
                     >
                       {isRegisterMode ? "QR Code" : "Register Now"}
@@ -566,7 +779,9 @@ export function EventDetailScreen({ eventId }: Props) {
                 )}
                 <button
                   className={`mt-3 h-11 w-full rounded-xl border text-sm font-semibold ${
-                    isBookmarked ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-700"
+                    isBookmarked
+                      ? "border-blue-200 bg-blue-50 text-blue-700"
+                      : "border-slate-200 text-slate-700"
                   }`}
                   type="button"
                   onClick={() => event && toggleBookmarkById(event.id)}
@@ -575,8 +790,12 @@ export function EventDetailScreen({ eventId }: Props) {
                   {isBookmarked ? "Bookmarked" : "Bookmark"}
                 </button>
                 {!isHistoryMode ? (
-                  <button className="mt-3 h-11 w-full rounded-xl border border-slate-200 text-sm font-semibold text-slate-700" type="button">
-                    <Calendar size={18} className="mr-1 inline" />Google Calendar
+                  <button
+                    className="mt-3 h-11 w-full rounded-xl border border-slate-200 text-sm font-semibold text-slate-700"
+                    type="button"
+                  >
+                    <Calendar size={18} className="mr-1 inline" />
+                    Google Calendar
                   </button>
                 ) : null}
               </div>
@@ -589,7 +808,9 @@ export function EventDetailScreen({ eventId }: Props) {
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs text-slate-500">
                     <Bookmark size={12} />
-                    {credentialCount > 0 ? `${safeCredentialIndex + 1}/${credentialCount}` : "0/0"}
+                    {credentialCount > 0
+                      ? `${safeCredentialIndex + 1}/${credentialCount}`
+                      : "0/0"}
                   </span>
                 </div>
                 {activeCredential ? (
@@ -601,9 +822,17 @@ export function EventDetailScreen({ eventId }: Props) {
                         </span>
                       </div>
                       <div className="relative -mt-9 mb-2 ml-2 flex h-[84px] w-[84px] items-center justify-center rounded-full border-4 border-white bg-[#8fb1d5]">
-                        <Image src="/assets/icons/cone.svg" alt="Cone" width={50} height={50} className="h-[50px] w-[50px]" />
+                        <Image
+                          src="/assets/icons/cone.svg"
+                          alt="Cone"
+                          width={50}
+                          height={50}
+                          className="h-[50px] w-[50px]"
+                        />
                       </div>
-                      <p className="text-[16px] font-semibold leading-8 text-slate-800">{activeCredential.title}</p>
+                      <p className="text-[16px] font-semibold leading-8 text-slate-800">
+                        {activeCredential.title}
+                      </p>
                       <p className="mt-1 line-clamp-3 text-[13px] leading-5 text-slate-500">
                         {activeCredential.description}
                       </p>
@@ -611,7 +840,9 @@ export function EventDetailScreen({ eventId }: Props) {
                         <p className="text-xs text-slate-400">Organization</p>
                         <div className="mt-1 flex items-center gap-1.5 text-[18px] font-semibold text-slate-800">
                           {activeCredential.organization}
-                          {activeCredential.verified ? <VerifiedBadgeImage size={18} /> : null}
+                          {activeCredential.verified ? (
+                            <VerifiedBadgeImage size={18} />
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -620,7 +851,9 @@ export function EventDetailScreen({ eventId }: Props) {
                         <FileText size={14} />
                         Requirement
                       </p>
-                      <p className="mt-1 text-sm">{activeCredential.requirement}</p>
+                      <p className="mt-1 text-sm">
+                        {activeCredential.requirement}
+                      </p>
                     </div>
                   </>
                 ) : (
@@ -631,21 +864,27 @@ export function EventDetailScreen({ eventId }: Props) {
                 <div className="mt-3 flex items-center justify-between">
                   <button
                     type="button"
-                    onClick={() => setCredentialIndex((prev) => Math.max(0, prev - 1))}
+                    onClick={() =>
+                      setCredentialIndex((prev) => Math.max(0, prev - 1))
+                    }
                     disabled={safeCredentialIndex <= 0}
                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
                   >
                     <ChevronLeft size={14} />
                   </button>
                   <div className="flex items-center gap-1.5">
-                    {Array.from({ length: Math.max(credentialCount, 1) }).map((_, index) => (
-                      <span
-                        key={`credential-dot-${index}`}
-                        className={`rounded-full ${
-                          index === safeCredentialIndex ? "h-1.5 w-5 bg-blue-500" : "h-1.5 w-1.5 bg-slate-300"
-                        }`}
-                      />
-                    ))}
+                    {Array.from({ length: Math.max(credentialCount, 1) }).map(
+                      (_, index) => (
+                        <span
+                          key={`credential-dot-${index}`}
+                          className={`rounded-full ${
+                            index === safeCredentialIndex
+                              ? "h-1.5 w-5 bg-blue-500"
+                              : "h-1.5 w-1.5 bg-slate-300"
+                          }`}
+                        />
+                      ),
+                    )}
                   </div>
                   <button
                     type="button"
@@ -654,7 +893,10 @@ export function EventDetailScreen({ eventId }: Props) {
                         Math.min(Math.max(credentialCount - 1, 0), prev + 1),
                       )
                     }
-                    disabled={safeCredentialIndex >= credentialCount - 1 || credentialCount === 0}
+                    disabled={
+                      safeCredentialIndex >= credentialCount - 1 ||
+                      credentialCount === 0
+                    }
                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
                   >
                     <ChevronRight size={14} />
@@ -685,7 +927,10 @@ export function EventDetailScreen({ eventId }: Props) {
             <div className="max-h-[62vh] overflow-y-auto bg-[#eaf4ff] px-4 py-4">
               <div className="space-y-2.5">
                 {data.outcomes.map((item, index) => (
-                  <div key={`${index}-${item}`} className="rounded-xl border border-[#bfdcff] bg-[#f7fbff] p-2.5">
+                  <div
+                    key={`${index}-${item}`}
+                    className="rounded-xl border border-[#bfdcff] bg-[#f7fbff] p-2.5"
+                  >
                     <p className="text-sm leading-6 text-[#2d5c9b]">{item}</p>
                   </div>
                 ))}
@@ -722,7 +967,9 @@ export function EventDetailScreen({ eventId }: Props) {
         onKeyLearningChange={(value) =>
           setClaimForms((prev) =>
             prev.map((form, index) =>
-              index === claimActiveIndex ? { ...form, keyLearning: value } : form,
+              index === claimActiveIndex
+                ? { ...form, keyLearning: value }
+                : form,
             ),
           )
         }
@@ -732,7 +979,10 @@ export function EventDetailScreen({ eventId }: Props) {
         open={showClaimSuccessModal}
         onClose={() => setShowClaimSuccessModal(false)}
       />
-      <ClaimToastBanner toast={claimToast} onClose={() => setClaimToast(null)} />
+      <ClaimToastBanner
+        toast={claimToast}
+        onClose={() => setClaimToast(null)}
+      />
     </div>
   );
 }
@@ -782,7 +1032,15 @@ function EventDetailSkeleton() {
   );
 }
 
-function MetaRow({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+function MetaRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#4A90E2]">
@@ -826,7 +1084,12 @@ function OverviewBlock({
   return (
     <div>
       <div className="relative">
-        <p ref={textRef} className={`${expanded ? "" : "line-clamp-6"} text-sm leading-8 text-slate-600`}>{text}</p>
+        <p
+          ref={textRef}
+          className={`${expanded ? "" : "line-clamp-6"} text-sm leading-8 text-slate-600`}
+        >
+          {text}
+        </p>
         {!expanded && canExpand ? (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white via-white/85 to-transparent" />
         ) : null}
@@ -882,7 +1145,10 @@ function RecommendedEventCard({
                 key={index}
                 className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/65 bg-white/8 text-white shadow-[0_6px_18px_rgba(15,23,42,0.18)] backdrop-blur-md"
               >
-                <Icon size={14} className="drop-shadow-[0_1px_1px_rgba(15,23,42,0.35)]" />
+                <Icon
+                  size={14}
+                  className="drop-shadow-[0_1px_1px_rgba(15,23,42,0.35)]"
+                />
               </span>
             ))}
           </div>
@@ -898,7 +1164,9 @@ function RecommendedEventCard({
             }}
             aria-label={card.isBookmarked ? "Remove bookmark" : "Bookmark card"}
             className={`absolute right-3 top-[10px] z-10 flex h-9 w-9 items-center justify-center rounded-full border bg-white/95 shadow ${
-              card.isBookmarked ? "border-blue-200 text-[#4A90E2]" : "border-slate-100 text-slate-300"
+              card.isBookmarked
+                ? "border-blue-200 text-[#4A90E2]"
+                : "border-slate-100 text-slate-300"
             }`}
           >
             <Bookmark size={15} />
@@ -906,28 +1174,48 @@ function RecommendedEventCard({
 
           <div className="flex h-[62px] shrink-0 flex-col">
             <div className="flex flex-1 flex-col justify-center pr-10">
-              <p className="line-clamp-2 text-sm font-medium leading-[1.32] text-slate-800">{card.title}</p>
-              <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-500">{card.university}</p>
+              <p className="line-clamp-2 text-sm font-medium leading-[1.32] text-slate-800">
+                {card.title}
+              </p>
+              <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-500">
+                {card.university}
+              </p>
             </div>
             <div className="h-px w-full bg-[#edf1f5]" />
           </div>
 
           <ul className="mt-2 space-y-1.5 text-[11px] leading-4 text-slate-500">
             <li className="flex items-center gap-1.5">
-              <MetaIconSmall><Calendar size={10} /></MetaIconSmall>{card.date}
+              <MetaIconSmall>
+                <Calendar size={10} />
+              </MetaIconSmall>
+              {card.date}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIconSmall><Clock3 size={10} /></MetaIconSmall>{card.time}
+              <MetaIconSmall>
+                <Clock3 size={10} />
+              </MetaIconSmall>
+              {card.time}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIconSmall><MapPin size={10} /></MetaIconSmall>{card.location}
+              <MetaIconSmall>
+                <MapPin size={10} />
+              </MetaIconSmall>
+              {card.location}
             </li>
             <li className="flex items-center gap-1.5">
-              <MetaIconSmall><Users size={10} /></MetaIconSmall>{card.seats}
+              <MetaIconSmall>
+                <Users size={10} />
+              </MetaIconSmall>
+              {card.seats}
             </li>
           </ul>
 
-          <p className={`mt-auto pt-3 text-[14px] font-semibold ${card.price.includes("Free") ? "text-emerald-600" : "text-cyan-700"}`}>{card.price}</p>
+          <p
+            className={`mt-auto pt-3 text-[14px] font-semibold ${card.price.includes("Free") ? "text-emerald-600" : "text-cyan-700"}`}
+          >
+            {card.price}
+          </p>
         </div>
       </article>
     </Link>
@@ -955,7 +1243,9 @@ function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="px-8 first:pl-0">
       <p className="text-sm text-slate-500">{label}</p>
-      <p className="mt-1 text-sm font-semibold leading-none text-slate-800">{value}</p>
+      <p className="mt-1 text-sm font-semibold leading-none text-slate-800">
+        {value}
+      </p>
     </div>
   );
 }
